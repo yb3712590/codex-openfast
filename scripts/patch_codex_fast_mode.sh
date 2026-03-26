@@ -16,11 +16,12 @@ PATCH_VERSION="force-fast-ui-v2"
 PATCH_SUMMARY="Force fast UI visibility, remove auth gating, keep native serviceTier flow"
 
 MODE="${1:-help}"
-ARG2="${2:-}"
+ARG2="${2:-}" 
 
 usage() {
   cat <<'EOF'
 Usage:
+  patch_codex_fast_mode.sh backup
   patch_codex_fast_mode.sh apply
   patch_codex_fast_mode.sh restore [backup_dir]
   patch_codex_fast_mode.sh status
@@ -31,6 +32,7 @@ Environment overrides:
 
 Notes:
   - patch version: force-fast-ui-v2
+  - backup: create integrity backup of app.asar + Info.plist (no patching)
   - apply: backup current app.asar + Info.plist, force fast-mode UI availability, remove auth gating, repack, update Electron's ASAR header hash, re-sign.
   - restore: restore app.asar + Info.plist from a backup dir (default: latest backup), then recompute the header hash.
   - status: check ElectronAsarIntegrity header hash match and gate markers.
@@ -157,6 +159,31 @@ patch_text_file() {
     s/fast_mode===!0&&([A-Za-z]{1,2})\(t\)/fast_mode===!0&&!0/g;
 PERL
 )" "$file"
+}
+
+cmd_backup() {
+  check_paths
+
+  local ts backup_dir
+  ts="$(date -u +%Y%m%dT%H%M%SZ)"
+  backup_dir="${PATCH_ROOT}/backup-${ts}"
+  mkdir -p "$backup_dir"
+
+  cp "$ASAR_PATH" "${backup_dir}/app.asar.original"
+  cp "$INFO_PLIST_PATH" "${backup_dir}/Info.plist.original"
+
+  cat > "${backup_dir}/README.txt" <<EOF
+Codex app integrity backup
+
+- Created at (UTC): $ts
+- App path: $APP_PATH
+- Asar path: $ASAR_PATH
+- Info.plist path: $INFO_PLIST_PATH
+- ElectronAsarIntegrity hash at backup time: $(plist_asar_hash)
+- Actual app.asar header hash at backup time: $(current_asar_header_hash)
+EOF
+
+  echo "BACKUP_DIR=$backup_dir"
 }
 
 cmd_apply() {
@@ -306,6 +333,9 @@ cmd_status() {
 }
 
 case "$MODE" in
+  backup)
+    cmd_backup
+    ;;
   apply)
     cmd_apply
     ;;
