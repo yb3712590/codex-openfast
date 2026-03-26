@@ -48,3 +48,8 @@ Codex 桌面端 Fast Mode 补丁工具，用于强制开启 fast mode UI 可见�
 - 每次 Codex 更新后需要重新执行 `apply`
 - 备份存储在 `~/.codex/patches/codex-fast-mode/backup-*`
 - 需要 `npx`、`rg`、`node`、`codesign` 命令
+
+
+## 论坛支持
+
+- [LinuxDo 论坛](https://linux.do)
