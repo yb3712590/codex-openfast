@@ -6,7 +6,7 @@ PATH="${PATH}:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/local/sbi
 APP_PATH="${CODEX_APP_PATH:-/Applications/Codex.app}"
 ASAR_PATH="${APP_PATH}/Contents/Resources/app.asar"
 INFO_PLIST_PATH="${APP_PATH}/Contents/Info.plist"
-PATCH_ROOT="${HOME}/.codex/patches/codex-fast-mode-ct-only"
+PATCH_ROOT="${HOME}/.codex/patches/codex-fast-mode"
 SIGN_IDENTITY="${CODEX_SIGN_IDENTITY:--}"
 ASAR_CLI="${CODEX_ASAR_CLI:-@electron/asar}"
 PATCH_VERSION="force-fast-ui-ct-only-v1"
@@ -18,10 +18,10 @@ ARG2="${2:-}"
 usage() {
   cat <<'EOF'
 Usage:
-  patch_codex_fast_mode_ct_only.sh backup
-  patch_codex_fast_mode_ct_only.sh apply
-  patch_codex_fast_mode_ct_only.sh restore [backup_dir]
-  patch_codex_fast_mode_ct_only.sh status
+  patch_codex_fast_mode.sh backup
+  patch_codex_fast_mode.sh apply
+  patch_codex_fast_mode.sh restore [backup_dir]
+  patch_codex_fast_mode.sh status
 
 Environment overrides:
   CODEX_APP_PATH=/path/to/Codex.app
